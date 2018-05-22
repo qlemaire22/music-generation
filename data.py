@@ -1,9 +1,22 @@
 import numpy as np
 from keras.utils import np_utils
+import config
+import glob
 
-def prepare_sequences(notes, n_vocab):
+def prepare_sequences():
     """ Prepare the sequences used by the Neural Network """
-    sequence_length = 100
+    sequence_length = config.SEQUENCE_LENGTH
+
+    filenames = []
+    for filename in glob.glob("data/*"):
+        filenames.append(filename)
+
+    filenames = sorted(filenames)
+
+    notes = []
+    for i in range(len(filenames)):
+        notes += list(np.load(filename))
+    print(notes)
 
     # get all pitch names
     pitchnames = sorted(set(item for item in notes))
@@ -31,3 +44,5 @@ def prepare_sequences(notes, n_vocab):
     network_output = np_utils.to_categorical(network_output)
 
     return (network_input, network_output)
+
+prepare_sequences()
