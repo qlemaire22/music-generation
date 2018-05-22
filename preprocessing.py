@@ -5,11 +5,16 @@ import pickle
 import config
 import numpy as np
 import argparse
+import os
 
 def create_data(nb_max):
     """ Get all the notes and chords from the midi files in the ./midi_songs directory """
 
     nb = 0
+
+    if not os.path.exists("data"):
+        print("Data folder created.")
+        os.makedirs("data")
 
     for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
         midi = converter.parse(file)

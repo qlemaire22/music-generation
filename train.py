@@ -9,7 +9,7 @@ import config
 def init():
     """ Train a Neural Network to generate music """
 
-    network_input, network_output = data.prepare_sequences()
+    network_input, network_output, n_vocab = data.prepare_sequences()
 
     net = network.Network(n_vocab)
     model = net.model
