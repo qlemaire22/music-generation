@@ -106,3 +106,7 @@ venv.bak/
 data/*
 
 *.hdf5
+
+.DS_Store
+
+.idea/*
