@@ -8,12 +8,7 @@ def create_data():
     """ Get all the notes and chords from the midi files in the ./midi_songs directory """
     notes = []
 
-    ite = 0
-
     for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
-
-        if ite == 100:
-            break;
 
         midi = converter.parse(file)
 
