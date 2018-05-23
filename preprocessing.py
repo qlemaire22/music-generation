@@ -37,7 +37,6 @@ def create_data(nb_max):
                 notes.append(str(element.pitch))
             elif isinstance(element, chord.Chord):
                 notes.append('.'.join(str(n) for n in element.normalOrder))
-        print(len(notes))
 
         np.save("data/" + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
