@@ -9,7 +9,7 @@ import config
 def init():
     """ Train a Neural Network to generate music """
 
-    network_input, network_output, n_vocab = data.prepare_sequences()
+    network_input, network_output, n_vocab, _, _ = data.prepare_sequences()
 
     net = network.Network(n_vocab)
     model = net.model
@@ -18,7 +18,7 @@ def init():
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "weights-improvement-{epoch:02d}-{loss:.4f}-bigger.hdf5"
+    filepath = "weights-{loss:.4f}.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
         monitor='loss',
