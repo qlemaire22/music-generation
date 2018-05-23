@@ -68,13 +68,15 @@ generator = Model(decoder_input, _x_decoded_mean)
 vae.compile(optimizer='rmsprop', loss=vae_loss)
 
 # input to the network : random vectors
-x_train = np.random.rand(nb_vect, vect_leng)
-x_test = np.random.rand(nb_vect, vect_leng)
+x_train = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
+x_test = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
 
 for vect in x_train:
-    vect[vect_leng-1] = vect[0]
+    vect[0] = 0
+    vect[-1] = 0
 for vect in x_test:
-    vect[vect_leng-1] = vect[0]
+    vect[0] = 0
+    vect[-1] = 0
 
 vae.fit(x_train, x_train,
         shuffle=True,
@@ -82,7 +84,10 @@ vae.fit(x_train, x_train,
         batch_size=batch_size,
         validation_data=(x_test, x_test))
 
+print(z_mean)
+
 # prediction
 input = np.random.rand(1, latent_dim)
+print(input)
 generated_vect = generator.predict(input)
 print(generated_vect)
