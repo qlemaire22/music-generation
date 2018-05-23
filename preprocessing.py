@@ -40,13 +40,12 @@ def create_data(nb_max):
                 notes.append('.'.join(str(n) for n in element.normalOrder))
 
 
-        if len(notes) < 2:
-            print("ERREUUUUUR!!!!")
+        if nb > 8600:
+            print(file)
 
         np.save("data/" + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
         nb += 1
-        print("saved")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
