@@ -33,32 +33,38 @@ def prepare_sequences():
         note_to_int = dict((note, number)
                            for number, note in enumerate(pitchnames))
 
-        network_input = []
+        unnormalized_network_input = []
         network_output = []
 
         # create input sequences and the corresponding outputs
         for i in range(0, len(notes) - sequence_length, 1):
             sequence_in = notes[i:i + sequence_length]
             sequence_out = notes[i + sequence_length]
-            network_input.append([note_to_int[char] for char in sequence_in])
+            unnormalized_network_input.append([note_to_int[char] for char in sequence_in])
             network_output.append(note_to_int[sequence_out])
 
         n_patterns = len(network_input)
 
         # reshape the input into a format compatible with LSTM layers
         network_input = np.reshape(
-            network_input, (n_patterns, sequence_length, 1))
+            unnormalized_network_input, (n_patterns, sequence_length, 1))
         # normalize input
         network_input = network_input / float(n_vocab)
 
         network_output = np_utils.to_categorical(network_output)
 
+        pitchnames = sorted(set(item for item in notes))
+
         np.save("data/all/network_input.npy", network_input)
         np.save("data/all/network_output.npy", network_output)
         np.save("data/all/n_vocab.npy", n_vocab)
+        np.save("data/all/pitchnames.npy", pitchnames)
+        np.save("data/all/unormalized.npy", unnormalized_network_input)
     else:
         network_input = np.load("data/all/network_input.npy")
         network_output = np.load("data/all/network_output.npy")
         n_vocab = int(np.load("data/all/n_vocab.npy"))
+        pitchnames = np.load("data/all/pitchnames.npy")
+        unnormalized_network_input = np.load("data/all/unormalized.npy")
 
-    return network_input, network_output, n_vocab
+    return network_input, network_output, n_vocab, pitchnames, unnormalized_network_input

@@ -6,11 +6,11 @@ from keras.layers import Activation
 import numpy as np
 
 class Network:
-    def __init__(self, n_vocab):
+    def __init__(self, n_vocab, shape=(None, 1)):
         self.model = Sequential()
         self.model.add(LSTM(
             512,
-            input_shape=(None, 1),
+            input_shape=shape,
             return_sequences=True
         ))
         self.model.add(Dropout(0.3))
