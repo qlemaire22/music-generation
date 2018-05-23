@@ -16,7 +16,8 @@ def create_data(nb_max):
         print("Data folder created.")
         os.makedirs("data")
 
-    for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
+    for file in glob.iglob(config.PATH_DATA_FILES, recursive=True):
+        print(nb)
         midi = converter.parse(file)
 
         notes_to_parse = None
@@ -40,7 +41,8 @@ def create_data(nb_max):
 
         np.save("data/" + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
-        nb +=1
+        nb += 1
+        print(saved)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
