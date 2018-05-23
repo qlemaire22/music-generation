@@ -2,6 +2,8 @@ import pickle
 import numpy
 from music21 import instrument, note, stream, chord
 from network import Network
+import data
+
 def generate():
     """ Generate a piano midi file """
     normalized_input, network_output, n_vocab, pitchnames, network_input = data.prepare_sequences()
