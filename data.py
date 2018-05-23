@@ -19,6 +19,7 @@ def prepare_sequences():
             filenames.append(filename)
 
         filenames = sorted(filenames)
+        print(len(filenames))
 
         notes = []
         for i in range(len(filenames)):
