@@ -38,7 +38,7 @@ def create_data(nb_max):
             elif isinstance(element, chord.Chord):
                 notes.append('.'.join(str(n) for n in element.normalOrder))
 
-        np.save("data/" + repr(nb) + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
+        np.save("data/" + str(nb) + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
         nb += 1
 
