@@ -13,10 +13,11 @@ import numpy as np
 batch_size = 32
 original_dim = 100  # vector size
 intermediate_dim = 50
-latent_dim = 2
+latent_dim = 4
 epsilon_std = 1
 epochs = 100
 nb_vect = 704
+vect_leng = 100
 
 
 # needed functions
@@ -50,7 +51,6 @@ decoder_mean = Dense(original_dim, activation='sigmoid')
 h_decoded = decoder_h(z)
 x_decoded_mean = decoder_mean(h_decoded)
 
-
 # Models
 # end-to-end autoencoder
 vae = Model(x, x_decoded_mean)
@@ -68,13 +68,13 @@ generator = Model(decoder_input, _x_decoded_mean)
 vae.compile(optimizer='rmsprop', loss=vae_loss)
 
 # input to the network : random vectors
-x_train = np.random.rand(nb_vect, 100)
-x_test = np.random.rand(nb_vect, 100)
+x_train = np.random.rand(nb_vect, vect_leng)
+x_test = np.random.rand(nb_vect, vect_leng)
 
 for vect in x_train:
-    vect[-1] = vect[0]
+    vect[vect_leng-1] = vect[0]
 for vect in x_test:
-    vect[-1] = vect[0]
+    vect[vect_leng-1] = vect[0]
 
 vae.fit(x_train, x_train,
         shuffle=True,
@@ -82,4 +82,7 @@ vae.fit(x_train, x_train,
         batch_size=batch_size,
         validation_data=(x_test, x_test))
 
-generator.predict()
+# prediction
+input = np.random.rand(1, latent_dim)
+generated_vect = generator.predict(input)
+print(generated_vect)
