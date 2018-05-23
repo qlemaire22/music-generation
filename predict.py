@@ -8,7 +8,7 @@ def generate():
     """ Generate a piano midi file """
     normalized_input, network_output, n_vocab, pitchnames, network_input = data.prepare_sequences()
 
-    model = Network(n_vocab, (normalized_input.shape[1], normalized_input.shape[1]))
+    model = Network(n_vocab)
     model.load_weights('weights-1.9942.hdf5')
     prediction_output = generate_notes(model, network_input, pitchnames, n_vocab)
     create_midi(prediction_output)
