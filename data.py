@@ -43,7 +43,7 @@ def prepare_sequences():
             unnormalized_network_input.append([note_to_int[char] for char in sequence_in])
             network_output.append(note_to_int[sequence_out])
 
-        n_patterns = len(network_input)
+        n_patterns = len(unnormalized_network_input)
 
         # reshape the input into a format compatible with LSTM layers
         network_input = np.reshape(
