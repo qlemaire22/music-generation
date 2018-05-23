@@ -9,7 +9,7 @@ def prepare_sequences():
     """ Prepare the sequences used by the Neural Network """
 
     if not os.path.exists("data/all"):
-        os.makedirs("data/all")
+
         print("Create dir data/all.")
 
         sequence_length = config.SEQUENCE_LENGTH
@@ -54,6 +54,8 @@ def prepare_sequences():
         network_output = np_utils.to_categorical(network_output)
 
         pitchnames = sorted(set(item for item in notes))
+
+        os.makedirs("data/all")
 
         np.save("data/all/network_input.npy", network_input)
         np.save("data/all/network_output.npy", network_output)
