@@ -1,7 +1,7 @@
 import pickle
 import numpy
 from music21 import instrument, note, stream, chord
-from network import Network
+import network
 import data
 
 def generate():
