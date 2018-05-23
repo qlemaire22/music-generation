@@ -21,7 +21,7 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
 
     int_to_note = dict((number, note) for number, note in enumerate(pitchnames))
 
-    pattern = network_input[start]
+    pattern = list(network_input[start])
     prediction_output = []
 
     # generate 500 notes
