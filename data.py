@@ -24,7 +24,7 @@ def prepare_sequences():
         notes = []
         for i in range(len(filenames)):
             notes += list(np.load(filename))
-
+        print(len(notes))
         n_vocab = len(set(notes))
         print(n_vocab)
 
