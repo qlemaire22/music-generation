@@ -17,7 +17,6 @@ def create_data(nb_max):
         os.makedirs("data")
 
     for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
-        print(nb)
         midi = converter.parse(file)
 
         notes_to_parse = None
