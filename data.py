@@ -19,16 +19,12 @@ def prepare_sequences():
             filenames.append(filename)
 
         filenames = sorted(filenames)
-        print(len(filenames))
 
         notes = []
         for i in range(len(filenames)):
-            notes += list(np.load(filename))
-        print(len(notes))
-        print(notes)
-        print(set(notes))
+            notes += list(np.load(filenames[i]))
+
         n_vocab = len(set(notes))
-        print(n_vocab)
 
         # get all pitch names
         pitchnames = sorted(set(item for item in notes))
