@@ -16,7 +16,7 @@ def create_data(nb_max):
         print("Data folder created.")
         os.makedirs("data")
 
-    for file in glob.iglob(config.PATH_DATA_FILES, recursive=True):
+    for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
         print(nb)
         midi = converter.parse(file)
 
@@ -39,11 +39,7 @@ def create_data(nb_max):
             elif isinstance(element, chord.Chord):
                 notes.append('.'.join(str(n) for n in element.normalOrder))
 
-
-        if nb > 8600:
-            print(file)
-
-        np.save("data/" + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
+        np.save("data/" + repr(nb) + file.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
         nb += 1
 
