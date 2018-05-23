@@ -25,6 +25,7 @@ def prepare_sequences():
             notes += list(np.load(filename))
 
         n_vocab = len(set(notes))
+        print(n_vocab)
 
         # get all pitch names
         pitchnames = sorted(set(item for item in notes))
