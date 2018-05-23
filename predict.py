@@ -11,7 +11,7 @@ def generate():
     net = network.Network(n_vocab)
     model = net.model
     model.load_weights('weights-1.9942.hdf5')
-    prediction_output = generate_notes(model, network_input, pitchnames, n_vocab)
+    prediction_output = generate_notes(model, list(network_input), list(pitchnames), n_vocab)
     create_midi(prediction_output)
 
 def generate_notes(model, network_input, pitchnames, n_vocab):
