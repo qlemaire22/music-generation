@@ -3,6 +3,8 @@ import numpy
 from music21 import instrument, note, stream, chord
 import network
 import data
+import argparse
+import config
 
 def generate():
     """ Generate a piano midi file """
@@ -10,7 +12,7 @@ def generate():
 
     net = network.Network(n_vocab)
     model = net.model
-    model.load_weights('results/weights-1.9942.hdf5')
+    model.load_weights('results/run1/weights-1.9942.hdf5')
     prediction_output = generate_notes(model, list(network_input), list(pitchnames), n_vocab)
     create_midi(prediction_output)
 
