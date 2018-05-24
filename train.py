@@ -36,7 +36,7 @@ def train(model, network_input, network_output):
 
     callbacks_list = [checkpoint, csv_logger]
 
-    model.fit(network_input, network_output, epochs=config.NUMBER_EPOCHS, batch_size=config.BATCH_SIZE, callbacks=callbacks_list, validation_split=0.8)
+    model.fit(network_input, network_output, epochs=config.NUMBER_EPOCHS, batch_size=config.BATCH_SIZE, callbacks=callbacks_list, validation_split=0.10)
 
 
 if __name__ == '__main__':

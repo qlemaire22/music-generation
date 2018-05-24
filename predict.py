@@ -6,7 +6,7 @@ import data
 import argparse
 import config
 
-def generate():
+def generate(i):
     """ Generate a piano midi file """
     normalized_input, network_output, n_vocab, pitchnames, network_input = data.prepare_sequences()
 
@@ -14,7 +14,7 @@ def generate():
     model = net.model
     model.load_weights('results/run1/weights-1.9942.hdf5')
     prediction_output = generate_notes(model, list(network_input), list(pitchnames), n_vocab)
-    create_midi(prediction_output)
+    create_midi(prediction_output, i)
 
 def generate_notes(model, network_input, pitchnames, n_vocab):
     """ Generate notes from the neural network based on a sequence of notes """
@@ -42,7 +42,7 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
 
     return prediction_output
 
-def create_midi(prediction_output):
+def create_midi(prediction_output, i):
     """ convert the output from the prediction to notes and create a midi file
         from the notes """
     offset = 0
@@ -73,7 +73,7 @@ def create_midi(prediction_output):
 
     midi_stream = stream.Stream(output_notes)
 
-    midi_stream.write('midi', fp='test_output.mid')
+    midi_stream.write('midi', fp='test_output' + str(i) + '.mid')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -84,4 +84,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     for i in range(args.number):
-        generate()
+        generate(i)
