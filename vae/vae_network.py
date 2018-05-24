@@ -15,7 +15,7 @@ class VAENetwork :
 
         # Layers of the basic VAE
         self.decoder_h = Dense(vae_config.INTER_DIM, activation='relu')
-        self.decoder_mean = Dense(vae_config., activation='sigmoid')
+        self.decoder_mean = Dense(vae_config.ORIGINAL_DIM, activation='sigmoid')
 
         x = Input(batch_shape=(vae_config.BATCH_SIZE, vae_config.ORIGINAL_DIM))
         h = Dense(vae_config.INTER_DIM, activation='relu')(x)
