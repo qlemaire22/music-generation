@@ -24,7 +24,7 @@ class Network:
         self.model.add(Dropout(0.3))
         self.model.add(Dense(n_vocab))
         self.model.add(Activation('softmax'))
-        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=["val_loss"])
+        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
     def load_weights(self, path):
         self.model.load_weights(path)
