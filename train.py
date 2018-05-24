@@ -27,7 +27,7 @@ def train(model, network_input, network_output):
     filepath = "outputs/weights/weights-{loss:.4f}.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
-        monitor='loss',
+        monitor='val_loss',
         verbose=0,
         save_best_only=True,
         mode='min'
