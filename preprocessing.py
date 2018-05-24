@@ -22,10 +22,10 @@ def create_data(nb_max):
 
     filenames = np.unique(filenames)
 
-    
+
 
     for filename in tqdm(filenames):
-        midi = converter.parse(file)
+        midi = converter.parse(filename)
 
         notes_to_parse = None
 
