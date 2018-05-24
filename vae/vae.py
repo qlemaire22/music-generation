@@ -84,10 +84,10 @@ vae.fit(x_train, x_train,
         batch_size=batch_size,
         validation_data=(x_test, x_test))
 
-print(z_mean)
+#print(z_mean)
 
 # prediction
 input = np.random.rand(1, latent_dim)
-print(input)
+#print(input)
 generated_vect = generator.predict(input)
-print(generated_vect)
+#print(generated_vect)
