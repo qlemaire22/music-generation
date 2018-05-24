@@ -14,7 +14,9 @@ import numpy as np
 
 
 def generate(g_input):
-    vae = vae_network.VAENetwork()
+    net = vae_network.VAENetwork()
+    model = net.model
+    model.load_weight('results/run1/weights-1.9942.hdf5')  # need to modify path
 
     decoder_input = Input(shape=(vae.LATENT_DIM,))
     _h_decoded = vae.decoder_h(decoder_input)
