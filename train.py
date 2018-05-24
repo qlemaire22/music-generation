@@ -5,6 +5,8 @@ import numpy as np
 from keras.callbacks import ModelCheckpoint
 from tqdm import tqdm
 import config
+from keras.callbacks import CSVLogger
+import os
 
 def init():
     """ Train a Neural Network to generate music """
@@ -14,11 +16,15 @@ def init():
     net = network.Network(n_vocab)
     model = net.model
 
+    if not os.path.exists("outputs"):
+        os.makedirs("outputs/")
+        os.makedirs("outputs/weights")
+
     train(model, network_input, network_output)
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "weights-{loss:.4f}.hdf5"
+    filepath = "outputs/weights/weights-{loss:.4f}.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
         monitor='loss',
@@ -26,9 +32,12 @@ def train(model, network_input, network_output):
         save_best_only=True,
         mode='min'
     )
-    callbacks_list = [checkpoint]
+    csv_logger = CSVLogger('outputs/train_log.csv', append=True, separator=';')
+
+    callbacks_list = [checkpoint, csv_logger]
 
     model.fit(network_input, network_output, epochs=config.NUMBER_EPOCHS, batch_size=config.BATCH_SIZE, callbacks=callbacks_list)
+
 
 if __name__ == '__main__':
     init()

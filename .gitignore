@@ -112,3 +112,5 @@ data/*
 .idea/*
 
 results/
+
+outputs/
