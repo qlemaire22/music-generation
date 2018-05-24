@@ -110,3 +110,5 @@ data/*
 .DS_Store
 
 .idea/*
+
+results/

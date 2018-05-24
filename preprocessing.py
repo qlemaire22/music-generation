@@ -16,7 +16,15 @@ def create_data(nb_max):
         print("Data folder created.")
         os.makedirs("data")
 
-    for file in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
+    filenames = []
+    for filename in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
+        filenames.append(filename)
+
+    filenames = np.unique(filenames)
+
+    
+
+    for filename in tqdm(filenames):
         midi = converter.parse(file)
 
         notes_to_parse = None

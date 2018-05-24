@@ -28,18 +28,7 @@ def train(model, network_input, network_output):
     )
     callbacks_list = [checkpoint]
 
-    for i in tqdm(range(config.NUMBER_EPOCHS)):
-        j = -1
-        ind = []
-        while j < network_input.shape[0]-1:
-            j += np.random.randint(1, 50)
-            if j >=network_input.shape[0]:
-                j = network_input.shape[0]-1
-            ind.append(j)
-
-        X = network_input[ind]
-        Y = network_output[ind]
-        model.fit(X, Y, epochs=1, batch_size=config.BATCH_SIZE, callbacks=callbacks_list)
+    model.fit(network_input, network_output, epochs=config.NUMBER_EPOCHS, batch_size=config.BATCH_SIZE, callbacks=callbacks_list)
 
 if __name__ == '__main__':
     init()
