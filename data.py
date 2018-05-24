@@ -36,6 +36,7 @@ def prepare_sequences():
         unnormalized_network_input = []
         network_output = []
 
+
         # create input sequences and the corresponding outputs
         for i in range(0, len(notes) - sequence_length, 1):
             sequence_in = notes[i:i + sequence_length]
