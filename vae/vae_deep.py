@@ -11,12 +11,12 @@ import numpy as np
 
 # some parameters
 batch_size = 32
-original_dim = 512  # vector size 512*6=3072
-inter_dim1 = int(original_dim/4)
+original_dim = 512*6  # vector size 512*6=3072
+inter_dim1 = int(original_dim/4) # 768
 inter_dim2 = int(inter_dim1/4)
-latent_dim = 8
+latent_dim = 100
 epsilon_std = 1
-epochs = 100
+epochs = 20
 nb_vect = 704
 vect_leng = original_dim
 

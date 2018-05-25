@@ -18,11 +18,7 @@ def generate(g_input):
     model = net.model
     model.load_weight('results/run1/weights-1.9942.hdf5')  # need to modify path
 
-    decoder_input = Input(shape=(vae_config.LATENT_DIM,))
-    _h_decoded = net.decoder_h(decoder_input)
-    _x_decoded_mean = net.decoder_mean(_h_decoded)
-
-    generator = Model(decoder_input, _x_decoded_mean)
+    generator = net.generator
 
     # the input must have shape (latent_dim, ?)
     return generator.predict(g_input)
