@@ -14,8 +14,8 @@ import vae_config
 class VAENetwork:
     def __init__(self):
         # Layers of the basic VAE
-        self.decoder_h = Dense(vae_config.INTER_DIM, activation='relu')
-        self.decoder_mean = Dense(vae_config.ORIGINAL_DIM, activation='sigmoid')
+        decoder_h = Dense(vae_config.INTER_DIM, activation='relu')
+        decoder_mean = Dense(vae_config.ORIGINAL_DIM, activation='sigmoid')
 
         x = Input(batch_shape=(vae_config.BATCH_SIZE, vae_config.ORIGINAL_DIM))
         h = Dense(vae_config.INTER_DIM, activation='relu')(x)
@@ -25,11 +25,17 @@ class VAENetwork:
         # sample new similar points from the latent space
         z = Lambda(self.sampling)([self.z_mean, self.z_log_sigma])
 
-        h_decoded = self.decoder_h(z)
-        x_decoded_mean = self.decoder_mean(h_decoded)
+        h_decoded = decoder_h(z)
+        x_decoded_mean = decoder_mean(h_decoded)
 
         # Encoder part of the model
         self.encoder = Model(x, self.z_mean)
+
+        # Decoder/Generator part of the model
+        decoder_input = Input(shape=(vae_config.LATENT_DIM,))
+        _h_decoded = decoder_h(decoder_input)
+        _x_decoded_mean = decoder_mean(_h_decoded)
+        self.generator = Model(decoder_input, _x_decoded_mean)
 
         self.model = Model(x, x_decoded_mean)
         self.model.compile(optimizer='rmsprop', loss=self.vae_loss)
