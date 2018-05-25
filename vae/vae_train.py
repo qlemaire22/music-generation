@@ -1,5 +1,6 @@
 import vae_network
 import vae_config
+import vae_data
 import os
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
@@ -15,14 +16,14 @@ def init():
 
     if not os.path.exists("outputs"):
         os.makedirs("outputs/")
-        os.makedirs("outputs/weights")
+        os.makedirs("outputs/vae_weights")
 
     train(model, network_input, network_output)
 
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "outputs/weights/weights-{loss:.4f}.hdf5"  # need to modify path
+    filepath = "outputs/weights/vae_weights-{loss:.4f}.hdf5"  # need to modify path
     checkpoint = ModelCheckpoint(
         filepath,
         monitor='val_loss',
@@ -30,7 +31,7 @@ def train(model, network_input, network_output):
         save_best_only=True,
         mode='min'
     )
-    csv_logger = CSVLogger('outputs/train_log.csv', append=True, separator=';')
+    csv_logger = CSVLogger('outputs/vae_train_log.csv', append=True, separator=';')
 
     callbacks_list = [checkpoint, csv_logger]
 
