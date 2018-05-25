@@ -6,18 +6,15 @@ import data
 import argparse
 import config
 
-RUN_NAME = "run3"
-WEIGHT_NAME = "weights-2.1514.hdf5"
-
-def generate(i):
+def generate():
     """ Generate a piano midi file """
     normalized_input, network_output, n_vocab, pitchnames, network_input = data.prepare_sequences()
 
-    net = network.Network(n_vocab)
+    net = network.NetworkGetStates(76)
     model = net.model
-    model.load_weights("results/"+RUN_NAME+"/"+WEIGHT_NAME)
+    model.load_weights('results/run1/weights-1.9942.hdf5')
     prediction_output = generate_notes(model, list(network_input), list(pitchnames), n_vocab)
-    create_midi(prediction_output, i)
+    create_midi(prediction_output)
 
 def generate_notes(model, network_input, pitchnames, n_vocab):
     """ Generate notes from the neural network based on a sequence of notes """
@@ -36,6 +33,10 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
 
         prediction = model.predict(prediction_input, verbose=0)
 
+        for x in prediction:
+            print(x.shape)
+        exit()
+
         index = numpy.argmax(prediction)
         result = int_to_note[index]
         prediction_output.append(result)
@@ -45,7 +46,7 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
 
     return prediction_output
 
-def create_midi(prediction_output, i):
+def create_midi(prediction_output):
     """ convert the output from the prediction to notes and create a midi file
         from the notes """
     offset = 0
@@ -76,7 +77,7 @@ def create_midi(prediction_output, i):
 
     midi_stream = stream.Stream(output_notes)
 
-    midi_stream.write('midi', fp="results/"+RUN_NAME+"/"+ 'test_output' + str(i) + '.mid')
+    midi_stream.write('midi', fp='test_output.mid')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -87,6 +88,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     for i in range(args.number):
-        print("Generation MIDI " + repr(i))
-        generate(i)
-        print("... Done")
+        generate()
