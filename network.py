@@ -62,7 +62,7 @@ class NetworkWithInit:
 
         lstm1_out = LSTM(512, return_sequences=True, stateful=True)(input)
 
-        lstm2_out = LSTM(512, return_sequences=True, rstateful=True)(lstm1_out)
+        lstm2_out = LSTM(512, return_sequences=True, stateful=True)(lstm1_out)
 
         lstm3_out = LSTM(512, stateful=True)(lstm2_out)
 
