@@ -11,7 +11,7 @@ def init():
 
     network_input, network_output = vae_data.prepare_sequences()
 
-    net = vae_network.VAENetwork()
+    net = vae_network.VAEDeepNetwork3()
     model = net.model
 
     if not os.path.exists("outputs"):
@@ -23,7 +23,7 @@ def init():
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "outputs/weights/vae_weights-{loss:.4f}.hdf5"  # need to modify path
+    filepath = "outputs/vae_weights/vae_weights-{loss:.4f}.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
         monitor='val_loss',
@@ -35,8 +35,11 @@ def train(model, network_input, network_output):
 
     callbacks_list = [checkpoint, csv_logger]
 
+    print(network_input.shape, network_output.shape)
+
     model.fit(network_input, network_output, shuffle=True, epochs=vae_config.NUMBER_EPOCHS,
-              batch_size=vae_config.BATCH_SIZE, callbacks=callbacks_list, validation_split=0.8)
+              batch_size=vae_config.BATCH_SIZE, callbacks=callbacks_list, validation_split=0.1)
+
 
 if __name__ == '__main__':
     init()

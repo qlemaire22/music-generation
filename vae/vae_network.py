@@ -66,7 +66,7 @@ class VAEDeepNetwork3:
         decoder_i3 = Dense(dim3, activation='relu')  # layer size 48
         decoder_mean = Dense(origdim, activation='sigmoid')
 
-        x = Input(batch_shape=(vae_config.BATCH_SIZE, vae_config.ORIGINAL_DIM))
+        x = Input(shape=(vae_config.ORIGINAL_DIM,))
         i1 = Dense(dim1, activation='relu')(x)
         i2 = Dense(dim2, activation='relu')(i1)
         i3 = Dense(dim3, activation='relu')(i2)
@@ -103,7 +103,7 @@ class VAEDeepNetwork3:
 
     def sampling(self, args):
         z_mean, z_log_sigma = args
-        epsilon = K.random_normal(shape=(vae_config.BATCH_SIZE, vae_config.LATENT_DIM),
+        epsilon = K.random_normal(shape=(vae_config.LATENT_DIM,),
                                   mean=0., stddev=vae_config.EPSILON_STD)  # changed std to stddev because of error
         return z_mean + K.exp(z_log_sigma) * epsilon
 
