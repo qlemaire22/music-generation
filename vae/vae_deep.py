@@ -14,7 +14,7 @@ batch_size = 32
 original_dim = 512  # vector size 512*6=3072
 inter_dim1 = int(original_dim/4)
 inter_dim2 = int(inter_dim1/4)
-latent_dim = 2
+latent_dim = 8
 epsilon_std = 1
 epochs = 100
 nb_vect = 704
@@ -73,21 +73,39 @@ generator = Model(decoder_input, _x_decoded_mean)
 vae.compile(optimizer='rmsprop', loss=vae_loss)
 
 # input to the network : random vectors
-x_train = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
-x_test = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
+x_train1 = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
+x_test1 = np.random.rand(nb_vect, vect_leng) / 2 + 0.5
 
-for vect in x_train:
+def custom_rand_vec():
+    array_train = []
+    for l in range(nb_vect):
+        vec = []
+        for j in range(int(vect_leng/2)):
+            vec.append(np.random.random())
+        for j in range(int(vect_leng/2)):
+            vec.append(np.random.random() / 4 + 0.75)
+        array_train.append(vec)
+    return array_train
+
+
+x_train2 = np.asarray(custom_rand_vec())
+x_test2 = np.asarray(custom_rand_vec())
+
+for vect in x_train2:
     vect[0] = 0
     vect[-1] = 0
-for vect in x_test:
+for vect in x_test2:
     vect[0] = 0
     vect[-1] = 0
 
-vae.fit(x_train, x_train,
+print(x_train2)
+print(x_test2)
+
+vae.fit(x_train2, x_train2,
         shuffle=True,
         epochs=epochs,
         batch_size=batch_size,
-        validation_data=(x_test, x_test))
+        validation_data=(x_test2, x_test2))
 
 #print(z_mean)
 
