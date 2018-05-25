@@ -14,9 +14,10 @@ import vae_config
 
 
 def generate(g_input):
-    net = vae_network.VAENetwork()
-    model = net.model
-    model.load_weight('results/run1/weights-1.9942.hdf5')  # need to modify path
+    net = vae_network.VAEDeepNetwork3()
+    net.load_weights('outputs/vae_weights/vae_weights-0.5627.hdf5')
+    #model = net.model
+    #model.load_weight('results/run1/weights-1.9942.hdf5')  # need to modify path
 
     generator = net.generator
 
