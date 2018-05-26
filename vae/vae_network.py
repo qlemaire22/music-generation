@@ -61,7 +61,7 @@ class VAEDeepNetwork3:
 
     def sampling(self, args):
         z_mean, z_log_sigma = args
-        epsilon = K.random_normal(shape=(vae_config.LATENT_DIM),
+        epsilon = K.random_normal(shape=(vae_config.BATCH_SIZE, vae_config.LATENT_DIM),
                                   mean=0., stddev=vae_config.EPSILON_STD)  # changed std to stddev because of error
         return z_mean + K.exp(z_log_sigma) * epsilon
 
