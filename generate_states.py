@@ -8,7 +8,7 @@ import config
 from keras.callbacks import CSVLogger
 import os
 
-conditions = ["han", "china"]
+conditions = ["norge"]
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
 
@@ -47,7 +47,7 @@ def generate_states(model, network_input):
 
         _, state1, state2, state3, state4, state5, state6 = model.predict(input, verbose=0)
         state = np.concatenate((state1.T, state2.T, state3.T, state4.T, state5.T, state6.T))
-        states[i] = state[0]
+        states[i] = state.T
 
     conditions_string = ""
     n = len(conditions)
