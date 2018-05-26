@@ -15,8 +15,7 @@ def init():
     model = net.model
 
     if not os.path.exists("outputs/vae_weights"):
-        os.makedirs("outputs/")
-        os.makedirs("outputs")
+        os.makedirs("outputs/vae_weights")
 
     train(model, network_input, network_output)
 
