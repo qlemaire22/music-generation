@@ -20,14 +20,14 @@ def plot(run_name):
                     loss.append(float(row[1]))
             i += 1
 
-        loss_plot = plt.plot(epochs, loss, label="training loss")
-        if val_loss != []:
-            val_loss_plot = plt.plot(epochs, val_loss, label="validation loss")
-        plt.xlabel('epoch')
-        plt.ylabel('loss')
-        plt.legend()
-        plt.savefig('results/' + run_name + 'graph.png')
-        plt.show()
+    loss_plot = plt.plot(epochs, loss, label="training loss")
+    if val_loss != []:
+        val_loss_plot = plt.plot(epochs, val_loss, label="validation loss")
+    plt.xlabel('epoch')
+    plt.ylabel('loss')
+    plt.legend()
+    plt.savefig('results/' + run_name + '/graph.png')
+    plt.show()
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 from midi2audio import FluidSynth
 
-# Installation of FluidSynth has to be done 
+# Installation of FluidSynth has to be done
 
-def listenMidi(path):
+def listenToMidi(path):
     FluidSynth().play_midi(path)
