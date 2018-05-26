@@ -14,9 +14,9 @@ def init():
     net = vae_network.VAEDeepNetwork3()
     model = net.model
 
-    if not os.path.exists("outputs"):
+    if not os.path.exists("outputs/vae_weights"):
         os.makedirs("outputs/")
-        os.makedirs("outputs/vae_weights")
+        os.makedirs("outputs")
 
     train(model, network_input, network_output)
 
@@ -31,7 +31,8 @@ def train(model, network_input, network_output):
         save_best_only=True,
         mode='min'
     )
-    csv_logger = CSVLogger('outputs/vae_train_log.csv', append=True, separator=';')
+    csv_logger = CSVLogger('outputs/vae_train_log.csv',
+                           append=True, separator=';')
 
     callbacks_list = [checkpoint, csv_logger]
 
