@@ -60,11 +60,11 @@ class NetworkWithInit:
 
         input = Input(shape=(None, 1), dtype='float32', name='input')
 
-        lstm1_out = LSTM(512, return_sequences=True, stateful=True)(input)
+        lstm1_out = LSTM(512, return_sequences=True)(input)
 
-        lstm2_out = LSTM(512, return_sequences=True, stateful=True)(lstm1_out)
+        lstm2_out = LSTM(512, return_sequences=True)(lstm1_out)
 
-        lstm3_out = LSTM(512, stateful=True)(lstm2_out)
+        lstm3_out = LSTM(512)(lstm2_out)
 
         dense1_out = Dense(256)(lstm3_out)
 

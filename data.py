@@ -5,20 +5,41 @@ import glob
 import os
 
 
-def prepare_sequences():
+def prepare_sequences(conditions = []):
     """ Prepare the sequences used by the Neural Network """
 
-    if not os.path.exists("data/all"):
+    conditions_string = ""
+    n = len(conditions)
 
-        print("Create dir data/all.")
+    for i in range(n):
+        conditions_string += conditions[i]
+        if i != n-1:
+            conditions_string += "_"
+
+    if conditions_string == "":
+        conditions_string = "all"
+
+    if not os.path.exists("data/" + conditions_string):
+
+        print("Create dir data/" + conditions_string + ".")
 
         sequence_length = config.SEQUENCE_LENGTH
 
-        filenames = []
+        filenames_temp = []
         for filename in glob.glob("data/*"):
-            filenames.append(filename)
+            filenames_temp.append(filename)
 
-        filenames = sorted(filenames)
+        filenames_sorted = sorted(filenames_temp)
+        filenames = []
+
+        for filename in filenames_sorted:
+            cond = True
+            for i in range(n):
+                if not(conditions[i] in filename):
+                    cond = False
+
+            if cond:
+                filenames.append(filename)
 
         notes = []
         for i in range(len(filenames)):
@@ -56,18 +77,18 @@ def prepare_sequences():
 
         pitchnames = sorted(set(item for item in notes))
 
-        os.makedirs("data/all")
+        os.makedirs("data/" + conditions_string)
 
-        np.save("data/all/network_input.npy", network_input)
-        np.save("data/all/network_output.npy", network_output)
-        np.save("data/all/n_vocab.npy", n_vocab)
-        np.save("data/all/pitchnames.npy", pitchnames)
-        np.save("data/all/unormalized.npy", unnormalized_network_input)
+        np.save("data/" + conditions_string + "/network_input.npy", network_input)
+        np.save("data/" + conditions_string + "/network_output.npy", network_output)
+        np.save("data/" + conditions_string + "/n_vocab.npy", n_vocab)
+        np.save("data/" + conditions_string + "/pitchnames.npy", pitchnames)
+        np.save("data/" + conditions_string + "/unormalized.npy", unnormalized_network_input)
     else:
-        network_input = np.load("data/all/network_input.npy")
-        network_output = np.load("data/all/network_output.npy")
-        n_vocab = int(np.load("data/all/n_vocab.npy"))
-        pitchnames = np.load("data/all/pitchnames.npy")
-        unnormalized_network_input = np.load("data/all/unormalized.npy")
+        network_input = np.load("data/" + conditions_string + "/network_input.npy")
+        network_output = np.load("data/" + conditions_string + "/network_output.npy")
+        n_vocab = int(np.load("data/" + conditions_string + "/n_vocab.npy"))
+        pitchnames = np.load("data/" + conditions_string + "/pitchnames.npy")
+        unnormalized_network_input = np.load("data/" + conditions_string + "/unormalized.npy")
 
     return network_input, network_output, n_vocab, pitchnames, unnormalized_network_input
