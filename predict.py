@@ -5,9 +5,11 @@ import network
 import data
 import argparse
 import config
+from tools import listenToMidi
 
-RUN_NAME = "run3"
-WEIGHT_NAME = "weights-2.1514.hdf5"
+RUN_NAME = "run2"
+WEIGHT_NAME = "weights-0.6252.hdf5"
+
 
 def generate(i):
     """ Generate a piano midi file """
@@ -15,16 +17,19 @@ def generate(i):
 
     net = network.Network(n_vocab)
     model = net.model
-    model.load_weights("results/"+RUN_NAME+"/"+WEIGHT_NAME)
-    prediction_output = generate_notes(model, list(network_input), list(pitchnames), n_vocab)
-    create_midi(prediction_output, i)
+    model.load_weights("results/" + RUN_NAME + "/" + WEIGHT_NAME)
+    prediction_output = generate_notes(model, list(
+        network_input), list(pitchnames), n_vocab)
+    return create_midi(prediction_output, i)
+
 
 def generate_notes(model, network_input, pitchnames, n_vocab):
     """ Generate notes from the neural network based on a sequence of notes """
     # pick a random sequence from the input as a starting point for the prediction
-    start = numpy.random.randint(0, len(network_input)-1)
+    start = numpy.random.randint(0, len(network_input) - 1)
 
-    int_to_note = dict((number, note) for number, note in enumerate(pitchnames))
+    int_to_note = dict((number, note)
+                       for number, note in enumerate(pitchnames))
 
     pattern = list(network_input[start])
     prediction_output = []
@@ -44,6 +49,7 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
         pattern = pattern[1:len(pattern)]
 
     return prediction_output
+
 
 def create_midi(prediction_output, i):
     """ convert the output from the prediction to notes and create a midi file
@@ -76,17 +82,24 @@ def create_midi(prediction_output, i):
 
     midi_stream = stream.Stream(output_notes)
 
-    midi_stream.write('midi', fp="results/"+RUN_NAME+"/"+ 'test_output' + str(i) + '.mid')
+    midi_stream.write('midi', fp="results/" + RUN_NAME +
+                      "/" + 'test_output' + str(i) + '.mid')
+    return "results/" + RUN_NAME + "/" + 'test_output' + str(i) + '.mid'
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--number', default=1,
                         help="int, number of music you want to generate.", type=int)
+    parser.add_argument('--listen', default=0,
+                        help="int, 1 to listen to the song directly with python after generation.", type=int)
 
     args = parser.parse_args()
 
     for i in range(args.number):
         print("Generation MIDI " + repr(i))
-        generate(i)
+        filename = generate(i)
         print("... Done")
+        if args.listen == 1:
+            listenToMidi(filename)
