@@ -8,7 +8,7 @@ import config
 from keras.callbacks import CSVLogger
 import os
 
-conditions = ["island"]
+conditions = ["han", "china"]
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
 
@@ -33,10 +33,21 @@ def generate_states(model, network_input):
 
     states = np.zeros((config.NUMBER_GENERATED_STATES, 512*6))
 
+    n = len(network_input)
+
     for i in tqdm(range(config.NUMBER_GENERATED_STATES)):
-        _, state1, state2, state3, state4, state5, state6 = model.predict(network_input, verbose=0)
-        state = np.concatenate((state1[-1].T, state2[-1].T, state3[-1].T, state4[-1].T, state5[-1].T, state6[-1].T))
-        states[i] = state
+
+        idx = i % n
+        idx2 = np.random.randint(0, n-1)
+        idx3 = np.random.randint(0, n-1)
+        idx4 = np.random.randint(0, n-1)
+
+        input = np.append((network_input[idx4], network_input[idx3], network_input[idx2]), network_input[idx])
+        input = input.reshape((1, input.shape[0], 1))
+
+        _, state1, state2, state3, state4, state5, state6 = model.predict(input, verbose=0)
+        state = np.concatenate((state1.T, state2.T, state3.T, state4.T, state5.T, state6.T))
+        states[i] = state[0]
 
     conditions_string = ""
     n = len(conditions)
