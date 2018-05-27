@@ -3,7 +3,10 @@ from keras import objectives
 from keras.layers import Lambda, Input, Dense
 from keras.models import Model
 
-import vae_config
+try:
+    import vae_config
+except:
+    import vae.vae_config as vae_config
 
 
 class VAE:

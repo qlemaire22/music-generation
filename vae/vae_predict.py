@@ -2,8 +2,12 @@ import numpy as np
 
 import argparse
 
-import vae_network
-import vae_config
+try:
+    import vae_network
+    import vae_config
+except:
+    import vae.vae_network as vae_network
+    import vae.vae_config as vae_config
 
 
 def generate():

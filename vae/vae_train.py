@@ -1,6 +1,11 @@
-import vae_network
-import vae_config
-import vae_data
+try:
+    import vae_network
+    import vae_config
+    import vae_data
+except:
+    import vae.vae_network as vae_network
+    import vae.vae_config as vae_config
+    import vae.vae_data as vae_data
 import os
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint

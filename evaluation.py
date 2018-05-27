@@ -4,18 +4,16 @@ import config
 import glob
 import os
 import data
+from tqdm import tqdm
 
-SONG_PATH = "results/run4/island_output0.npy"
+SONG_PATH = "results/run4/han_china_output2.npy"
 
 def evaluation():
     filenames_temp = []
-    for filename in glob.glob("data/*"):
+    for filename in glob.glob("data/individual_songs/*"):
         filenames_temp.append(filename)
 
-    filenames_sorted = sorted(filenames_temp)
-    filenames = []
-
-    filenames.append(filename)
+    filenames = sorted(filenames_temp)
 
     _, _, n_vocab, pitchnames, _ = data.prepare_sequences()
 
@@ -28,7 +26,7 @@ def evaluation():
 
     distances = []
 
-    for i in range(len(filenames)):
+    for i in tqdm(range(len(filenames))):
         list_notes = list(np.load(filenames[i]))
         list_notes = [note_to_int[char] for char in list_notes]
         distances.append(distance(song, list_notes))
@@ -38,6 +36,7 @@ def evaluation():
     list_notes = list(np.load(filenames[distances.index(min(distances))]))
     list_notes = [note_to_int[char] for char in list_notes]
     print(list_notes)
+    
 def distance(song1, song2):
     if len(song2) > len(song1):
         song1, song2 = song2, song1
