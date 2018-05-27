@@ -1,5 +1,5 @@
 import numpy as np
-import vae.vae_config as vae_config
+import vae_config
 
 DATA_FILE = "outputs/states/han_china_states.npy"
 
