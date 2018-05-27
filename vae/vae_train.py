@@ -22,10 +22,10 @@ def init():
 
 def train(model, network_input, network_output):
     """ train the neural network """
-    filepath = "outputs/vae_weights/vae_weights-{loss:.4f}.hdf5"
+    filepath = "outputs/vae_weights/vae_weights.hdf5"
     checkpoint = ModelCheckpoint(
         filepath,
-        monitor='val_loss',
+        monitor='loss',
         verbose=0,
         save_best_only=True,
         mode='min'
