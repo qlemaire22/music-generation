@@ -33,8 +33,8 @@ def generate(i):
     conditions_string = ""
     n = len(conditions)
 
-    for i in range(n):
-        conditions_string += conditions[i]
+    for j in range(n):
+        conditions_string += conditions[j]
         conditions_string += "_"
 
     if conditions_string == "":
@@ -85,8 +85,8 @@ def create_midi(prediction_output, i):
     conditions_string = ""
     n = len(conditions)
 
-    for i in range(n):
-        conditions_string += conditions[i]
+    for j in range(n):
+        conditions_string += conditions[j]
         conditions_string += "_"
 
     if conditions_string == "":
