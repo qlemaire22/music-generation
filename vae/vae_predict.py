@@ -1,33 +1,27 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-
 import numpy as np
 
 import argparse
 
-import vae_network
-import vae_config
+import vae.vae_network as vae_network
+import vae.vae_config as vae_config
 
 
-def generate(g_input):
-    net = vae_network.VAEDeepNetwork3()
+def generate():
+    g_input = 2 * np.random.rand(1, vae_config.LATENT_DIM)
+
+    net = vae_network.VAE()
     net.load_weights('outputs/vae_weights/vae_weights.hdf5')
 
     generator = net.generator
 
     y = generator.predict(g_input)
 
-    print(y)
-    print(np.max(y))
-    print(np.min(y))
-    print(np.mean(y))
-    return y * 10
+    return y
 
 
 if __name__ == '__main__':
-    g_input = np.random.rand(1, vae_config.LATENT_DIM)
-    result = generate(g_input)
+
+    result = generate()
 
     parser = argparse.ArgumentParser()
 

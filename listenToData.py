@@ -3,7 +3,7 @@ from music21 import converter, stream, instrument, note, chord
 from tools import listenToMidi
 import argparse
 
-FILE_SUBPATH = "asia/china/han/han0005.krn"
+FILE_SUBPATH = "europa/misc/norge01.krn"
 
 
 def KRNtoMIDI(rythm):
@@ -27,6 +27,7 @@ def KRNtoMIDI(rythm):
 
     midi_stream.write('midi', fp='temp.mid')
     listenToMidi("temp.mid")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

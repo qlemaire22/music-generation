@@ -6,29 +6,43 @@ import data
 import argparse
 import config
 from tools import listenToMidi
+from vae import vae_predict
+import numpy as np
 
-RUN_NAME = "run2"
-WEIGHT_NAME = "weights-0.6252.hdf5"
-STATES_NAME = ""
-conditions = ["island"]
-
+RUN_NAME = "run4"
+WEIGHT_NAME = "weights-0.2561.hdf5"
+conditions = ["han", "china"]
 
 
 def generate(i):
     """ Generate a piano midi file """
 
-    states = np.load(STATES_NAME)
+    states = vae_predict.generate()
 
-    h1, c1, h2, c2, h3, c3 = np.split(x, 512)
+    h1, c1, h2, c2, h3, c3 = np.split(states.T, 6)
 
     _, _, n_vocab, pitchnames, _ = data.prepare_sequences()
-    _, _, _, _, network_input = data.prepare_sequences(conditions = conditions)
+    _, _, _, _, network_input = data.prepare_sequences(conditions=conditions)
 
     net = network.NetworkWithInit(n_vocab, h1, c1, h2, c2, h3, c3)
     model = net.model
     model.load_weights("results/" + RUN_NAME + "/" + WEIGHT_NAME)
-    prediction_output = generate_notes(model, list(
+    prediction_output, network_output = generate_notes(model, list(
         network_input), list(pitchnames), n_vocab)
+
+    conditions_string = ""
+    n = len(conditions)
+
+    for i in range(n):
+        conditions_string += conditions[i]
+        conditions_string += "_"
+
+    if conditions_string == "":
+        conditions_string = "all"
+
+
+    np.save("results/" + RUN_NAME +
+            "/" + conditions_string + 'output' + str(i) + '.npy', network_output)
     return create_midi(prediction_output, i)
 
 
@@ -42,6 +56,7 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
 
     pattern = list(network_input[start])
     prediction_output = []
+    network_output = []
 
     # generate 500 notes
     for note_index in range(config.GENERATION_LENGTH):
@@ -51,13 +66,14 @@ def generate_notes(model, network_input, pitchnames, n_vocab):
         prediction = model.predict(prediction_input, verbose=0)
 
         index = numpy.argmax(prediction)
+        network_output.append(index)
         result = int_to_note[index]
         prediction_output.append(result)
 
         pattern.append(index)
         pattern = pattern[1:len(pattern)]
 
-    return prediction_output
+    return prediction_output, network_output
 
 
 def create_midi(prediction_output, i):
@@ -102,8 +118,8 @@ def create_midi(prediction_output, i):
     midi_stream = stream.Stream(output_notes)
 
     midi_stream.write('midi', fp="results/" + RUN_NAME +
-                      "/" + conditions_string +'_output' + str(i) + '.mid')
-    return "results/" + RUN_NAME + "/" + 'test_output' + str(i) + '.mid'
+                      "/" + conditions_string + 'output' + str(i) + '.mid')
+    return "results/" + RUN_NAME + "/" + conditions_string + 'output' + str(i) + '.mid'
 
 
 if __name__ == '__main__':
@@ -119,6 +135,6 @@ if __name__ == '__main__':
     for i in range(args.number):
         print("Generation MIDI " + repr(i))
         filename = generate(i)
-        print("... Done")
+        print("... Done, ", filename)
         if args.listen == 1:
             listenToMidi(filename)
