@@ -8,7 +8,7 @@ import config
 from keras.callbacks import CSVLogger
 import os
 
-conditions = ["norge"]
+conditions = ["han", "china"]
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
 
