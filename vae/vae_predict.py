@@ -12,11 +12,17 @@ import vae_config
 
 def generate(g_input):
     net = vae_network.VAEDeepNetwork3()
-    net.load_weights('outputs/vae_weights/vae_weights-0.5348.hdf5')
+    net.load_weights('outputs/vae_weights/vae_weights.hdf5')
 
     generator = net.generator
 
-    return generator.predict(g_input)
+    y = generator.predict(g_input)
+
+    print(y)
+    print(np.max(y))
+    print(np.min(y))
+    print(np.mean(y))
+    return y * 10
 
 
 if __name__ == '__main__':

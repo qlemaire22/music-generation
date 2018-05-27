@@ -14,26 +14,34 @@ class VAEDeepNetwork3:
         dim1 = vae_config.INTER_DIM1
         dim2 = vae_config.INTER_DIM2
         dim3 = vae_config.INTER_DIM3
+        dim4 = vae_config.INTER_DIM4
+        dim5 = vae_config.INTER_DIM5
         origdim = vae_config.ORIGINAL_DIM
         latent_dim = vae_config.LATENT_DIM
 
-        decoder_i1 = Dense(dim1, activation='tanh')  # layer size 768
-        decoder_i2 = Dense(dim2, activation='tanh')  # layer size 192
-        decoder_i3 = Dense(dim3, activation='tanh')  # layer size 48
-        decoder_mean = Dense(origdim, activation='sigmoid')
+        decoder_i1 = Dense(dim1, activation='relu')  # layer size 768
+        decoder_i2 = Dense(dim2, activation='relu')  # layer size 192
+        decoder_i3 = Dense(dim3, activation='relu')  # layer size 48
+        decoder_i4 = Dense(dim4, activation='relu')  # layer size 48
+        decoder_i5 = Dense(dim5, activation='relu')  # layer size 48
+        decoder_mean = Dense(origdim)
 
         x = Input(shape=(vae_config.ORIGINAL_DIM,))
-        i1 = Dense(dim1, activation='tanh')(x)
-        i2 = Dense(dim2, activation='tanh')(i1)
-        i3 = Dense(dim3, activation='tanh')(i2)
+        i1 = Dense(dim1, activation='relu')(x)
+        i2 = Dense(dim2, activation='relu')(i1)
+        i3 = Dense(dim3, activation='relu')(i2)
+        i4 = Dense(dim4, activation='relu')(i3)
+        i5 = Dense(dim5, activation='relu')(i4)
 
-        self.z_mean = Dense(latent_dim)(i3)
-        self.z_log_sigma = Dense(latent_dim)(i3)
+        self.z_mean = Dense(latent_dim)(i5)
+        self.z_log_sigma = Dense(latent_dim)(i5)
 
         # sample new similar points from the latent space
         z = Lambda(self.sampling, output_shape=(latent_dim,), name='z')([self.z_mean, self.z_log_sigma])
 
-        i3_decoded = decoder_i3(z)
+        i5_decoded = decoder_i5(z)
+        i4_decoded = decoder_i4(i5_decoded)
+        i3_decoded = decoder_i3(i4_decoded)
         i2_decoded = decoder_i2(i3_decoded)
         i1_decoded = decoder_i1(i2_decoded)
         x_decoded_mean = decoder_mean(i1_decoded)
@@ -43,14 +51,16 @@ class VAEDeepNetwork3:
 
         # Decoder/Generator part of the model
         decoder_input = Input(shape=(latent_dim,))
-        _i3_decoded = decoder_i3(decoder_input)
+        _i5_decoded = decoder_i5(decoder_input)
+        _i4_decoded = decoder_i4(_i5_decoded)
+        _i3_decoded = decoder_i3(_i4_decoded)
         _i2_decoded = decoder_i2(_i3_decoded)
         _i1_decoded = decoder_i1(_i2_decoded)
         _x_decoded_mean = decoder_mean(_i1_decoded)
         self.generator = Model(decoder_input, _x_decoded_mean)
 
         self.model = Model(x, x_decoded_mean)
-        self.model.compile(optimizer='rmsprop', loss=self.vae_loss)
+        self.model.compile(optimizer='adam', loss=self.vae_loss)
 
     # custom loss function : the sum of a reconstruction term, and the KL divergence regularization term
     def vae_loss(self, x, x_decoded_mean):
