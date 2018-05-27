@@ -1,6 +1,6 @@
-import vae_network
-import vae_config
-import vae_data
+import vae.vae_network as vae_network
+import vae.vae_config as vae_config
+import vae.vae_data as vae_data
 import os
 from keras.callbacks import CSVLogger
 from keras.callbacks import ModelCheckpoint
@@ -12,7 +12,7 @@ def init():
 
     network_input, network_output = vae_data.prepare_sequences()
 
-    net = vae_network.VAEDeepNetwork3()
+    net = vae_network.VAE()
     model = net.model
 
     if not os.path.exists("outputs/vae_weights"):

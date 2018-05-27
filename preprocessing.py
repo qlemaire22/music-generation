@@ -15,6 +15,7 @@ def create_data(nb_max):
     if not os.path.exists("data"):
         print("Data folder created.")
         os.makedirs("data")
+        os.makedirs("data/individual_songs")
 
     filenames = []
     for filename in tqdm(glob.iglob(config.PATH_DATA_FILES, recursive=True)):
@@ -44,7 +45,7 @@ def create_data(nb_max):
             elif isinstance(element, chord.Chord):
                 notes.append('.'.join(str(n) for n in element.normalOrder))
 
-        np.save("data/" + str(nb) + filename.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
+        np.save("data/individual_songs/" + str(nb) + filename.replace(config.PATH_DATA_FILES[:-11], '').replace("/", '-').replace(".krn", '.npy'), notes)
 
         nb += 1
 

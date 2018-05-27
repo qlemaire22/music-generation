@@ -3,12 +3,10 @@ from keras import objectives
 from keras.layers import Lambda, Input, Dense
 from keras.models import Model
 
-import vae_config
-
-# Deep VAE with 3 intermediate layers
+import vae.vae_config as vae_config
 
 
-class VAEDeepNetwork3:
+class VAE:
     def __init__(self):
         # Layers of the basic VAE
         dim1 = vae_config.INTER_DIM1
@@ -37,7 +35,8 @@ class VAEDeepNetwork3:
         self.z_log_sigma = Dense(latent_dim)(i5)
 
         # sample new similar points from the latent space
-        z = Lambda(self.sampling, output_shape=(latent_dim,), name='z')([self.z_mean, self.z_log_sigma])
+        z = Lambda(self.sampling, output_shape=(latent_dim,),
+                   name='z')([self.z_mean, self.z_log_sigma])
 
         i5_decoded = decoder_i5(z)
         i4_decoded = decoder_i4(i5_decoded)
@@ -66,7 +65,8 @@ class VAEDeepNetwork3:
     def vae_loss(self, x, x_decoded_mean):
         reconstruction_loss = objectives.mse(x, x_decoded_mean)
         reconstruction_loss *= vae_config.ORIGINAL_DIM
-        kl_loss = 1 + self.z_log_sigma - K.square(self.z_mean) - K.exp(self.z_log_sigma)
+        kl_loss = 1 + self.z_log_sigma - \
+            K.square(self.z_mean) - K.exp(self.z_log_sigma)
         kl_loss = K.sum(kl_loss, axis=-1)
         kl_loss *= -0.5
         vae_loss = K.mean(reconstruction_loss + kl_loss)
