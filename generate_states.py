@@ -2,10 +2,8 @@ import network
 import data
 import preprocessing
 import numpy as np
-from keras.callbacks import ModelCheckpoint
 from tqdm import tqdm
 import config
-from keras.callbacks import CSVLogger
 import os
 
 conditions = ["han", "china"]
