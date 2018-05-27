@@ -4,5 +4,5 @@ import vae_config
 DATA_FILE = "outputs/states/han_china_states.npy"
 
 def prepare_sequences():
-    x_train = np.load(DATA_FILE)
+    x_train = np.load(DATA_FILE) / 10
     return x_train, x_train
