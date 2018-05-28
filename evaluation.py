@@ -6,7 +6,7 @@ import os
 import data
 from tqdm import tqdm
 
-SONG_PATH = "results/run4/han_china_output2.npy"
+SONG_PATH = "results/run4/italia_output4.npy"
 
 def evaluation():
     filenames_temp = []
@@ -29,14 +29,15 @@ def evaluation():
     for i in tqdm(range(len(filenames))):
         list_notes = list(np.load(filenames[i]))
         list_notes = [note_to_int[char] for char in list_notes]
-        distances.append(distance(song, list_notes))
+        if len(list_notes) > 0:
+            distances.append(distance(song, list_notes)/len(list_notes))
 
     print("Closest song: " + filenames[distances.index(min(distances))] + " " + str(min(distances)))
     print(song)
     list_notes = list(np.load(filenames[distances.index(min(distances))]))
     list_notes = [note_to_int[char] for char in list_notes]
     print(list_notes)
-    
+
 def distance(song1, song2):
     if len(song2) > len(song1):
         song1, song2 = song2, song1
@@ -51,11 +52,10 @@ def distance(song1, song2):
         i2 = i + n2
 
         if i2 < n1:
-            distances.append(sum(song1[i1:i2] - song2))
+            distances.append(np.sum(np.abs(song1[i1:i2] - song2)))
         else:
             temp_song = np.append(song1[i1:n1-1], song1[:i2-n1+1])
-            distances.append(sum(temp_song - song2))
-
+            distances.append(np.sum(np.abs(temp_song - song2)))
     return min(distances)
 
 if __name__ == '__main__':

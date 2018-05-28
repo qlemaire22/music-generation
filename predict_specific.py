@@ -1,4 +1,3 @@
-import pickle
 import numpy
 from music21 import instrument, note, stream, chord
 import network
@@ -11,7 +10,7 @@ import numpy as np
 
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
-conditions = ["han", "china"]
+conditions = ["italia"]
 
 
 def generate(i):
@@ -40,6 +39,7 @@ def generate(i):
     if conditions_string == "":
         conditions_string = "all"
 
+    print("Generate songs for:" + conditions_string)
 
     np.save("results/" + RUN_NAME +
             "/" + conditions_string + 'output' + str(i) + '.npy', network_output)

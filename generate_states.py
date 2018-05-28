@@ -6,7 +6,7 @@ from tqdm import tqdm
 import config
 import os
 
-conditions = ["han", "china"]
+conditions = ["mexico", "xinhua"]
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
 
@@ -33,6 +33,18 @@ def generate_states(model, network_input):
 
     n = len(network_input)
 
+    conditions_string = ""
+    n = len(conditions)
+
+    for i in range(n):
+        conditions_string += conditions[i]
+        conditions_string += "_"
+
+    if conditions_string == "":
+        conditions_string = "all"
+
+    print("Generate states for: " + conditions_string)
+
     for i in tqdm(range(config.NUMBER_GENERATED_STATES)):
 
         idx = i % n
@@ -46,16 +58,6 @@ def generate_states(model, network_input):
         _, state1, state2, state3, state4, state5, state6 = model.predict(input, verbose=0)
         state = np.concatenate((state1.T, state2.T, state3.T, state4.T, state5.T, state6.T))
         states[i] = state.T
-
-    conditions_string = ""
-    n = len(conditions)
-
-    for i in range(n):
-        conditions_string += conditions[i]
-        conditions_string += "_"
-
-    if conditions_string == "":
-        conditions_string = "all"
 
     np.save("outputs/states/" + conditions_string + "states.npy", states)
 

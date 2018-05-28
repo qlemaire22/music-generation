@@ -11,10 +11,10 @@ except:
 
 
 def generate():
-    g_input = 2 * np.random.rand(1, vae_config.LATENT_DIM)
+    g_input = np.random.rand(1, vae_config.LATENT_DIM)
 
     net = vae_network.VAE()
-    net.load_weights('outputs/vae_weights/vae_weights.hdf5')
+    net.load_weights('outputs/italia/vae_weights/vae_weights.hdf5')
 
     generator = net.generator
 

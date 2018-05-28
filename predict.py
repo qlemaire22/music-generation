@@ -1,4 +1,3 @@
-import pickle
 import numpy
 from music21 import instrument, note, stream, chord
 import network
