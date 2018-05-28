@@ -45,7 +45,7 @@ def train(model, network_input, network_output):
     print(np.mean(network_input))
 
     model.fit(network_input, network_output, shuffle=True, epochs=vae_config.NUMBER_EPOCHS,
-              batch_size=vae_config.BATCH_SIZE, callbacks=callbacks_list, validation_split=0.1)
+              batch_size=vae_config.BATCH_SIZE, callbacks=callbacks_list)
 
 
 if __name__ == '__main__':

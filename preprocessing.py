@@ -10,6 +10,10 @@ import os
 def create_data(nb_max):
     """ Get all the notes and chords from the midi files in the ./midi_songs directory """
 
+    """ Error when parsing: humdrum.spineParser: WARNING: Error in parsing event ('*MX') at position 10 for spine None: ('Incorrect meter: %s found', '*MX')
+        Can occur sometimes when parsing
+    """
+    
     nb = 0
 
     if not os.path.exists("data"):

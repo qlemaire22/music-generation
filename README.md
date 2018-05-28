@@ -15,7 +15,3 @@ The two last requirements are only necessary if you want to be able to listen to
 ## Dataset
 
 ## How to reproduce?
-
-## Know issues
-
-Error when parsing: humdrum.spineParser: WARNING: Error in parsing event ('*MX') at position 10 for spine None: ('Incorrect meter: %s found', '*MX')

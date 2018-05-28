@@ -33,13 +33,15 @@ def prepare_sequences(conditions=[]):
         filenames = []
 
         for filename in filenames_sorted:
-            cond = True
+            cond = False
             for i in range(n):
-                if not(conditions[i] in filename):
-                    cond = False
+                if conditions[i] in filename:
+                    cond = True
 
             if cond:
                 filenames.append(filename)
+
+        print("Number of songs matching the conditions: " + repr(len(filenames)))
 
         notes = []
         for i in range(len(filenames)):
