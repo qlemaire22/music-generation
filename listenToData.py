@@ -3,10 +3,10 @@ from music21 import converter, stream, instrument, note, chord
 from tools import listenToMidi
 import argparse
 
-FILE_SUBPATH = "asia/china/xinhua/china04.krn"
+FILE_SUBPATH = "europa/misc/suomi01.krn"
 
 
-def KRNtoMIDI(rythm):
+def KRNtoMIDI(rhythm):
     print(config.PATH_DATA_FILES[:-11] + FILE_SUBPATH)
 
     s = converter.parse(config.PATH_DATA_FILES[:-11] + FILE_SUBPATH)
@@ -18,7 +18,7 @@ def KRNtoMIDI(rythm):
         if isinstance(current_note, note.Note):
             new_note = current_note
             new_note.storedInstrument = instrument.Piano()
-            if rythm == 0:
+            if rhythm == 0:
                 new_note.offset = offset
             notes.append(new_note)
             offset += 0.5
@@ -32,9 +32,9 @@ def KRNtoMIDI(rythm):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--rythm', default=1,
+    parser.add_argument('--rhythm', default=1,
                         help="int, 0 if you want all note to last 0.5 time.", type=int)
 
     args = parser.parse_args()
 
-    KRNtoMIDI(args.rythm)
+    KRNtoMIDI(args.rhythm)
