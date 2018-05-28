@@ -6,7 +6,7 @@ from tqdm import tqdm
 import config
 import os
 
-conditions = ["mexico", "xinhua"]
+conditions = ["arabic", "india", "ashsham", "suomi"]
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
 
