@@ -10,7 +10,7 @@ import numpy as np
 
 RUN_NAME = "run4"
 WEIGHT_NAME = "weights-0.2561.hdf5"
-conditions = ["italia"]
+conditions = ["mexico", "xinhua"]
 
 
 def generate(i):
