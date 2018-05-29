@@ -8,13 +8,13 @@ from tqdm import tqdm
 import copy
 import argparse
 
-SONG_PATH = "results/italia_output5.npy"
+SONG_PATH = "results/han_china_output0.npy"
 HISTO_PATH = "histograms/"
 NB_SEMITONES = 12
 REAL_NB_NOTES = 52
 
 
-def evaluation():
+"""def evaluation():
     print("Evaluating: " + SONG_PATH)
     filenames_temp = []
     for filename in glob.glob("data/individual_songs/*"):
@@ -129,9 +129,10 @@ def distance_debug(song1, song2):
                 print(np.abs(temp_song - song2))
 
     return min(distances)
+"""
 
 
-def evaluation_whole():
+def evaluation(whole):
     print("Evaluating: " + SONG_PATH)
     files_path = "data/individual_songs/"
 
@@ -147,19 +148,63 @@ def evaluation_whole():
             filenames_short.append(filename[len(files_path):])
         else:
             filenames_short.append(filename)
-    print(filenames_short[0])
 
-    _, _, n_vocab, pitchnames, _ = data.prepare_sequences()
+    if whole == 0:
+        if not os.path.exists("histograms"):
+            os.makedirs("histograms")
+        distances = create_hist_distances(filenames_short, filenames)
+
+    elif whole == 1:
+        if not (os.path.exists("histograms")):
+            print("There is histograms, under histogram directory. Please try computing "
+                  "all the histograms first (parameter 1).")
+            return
+        else:
+            distances = load_hist_distances(filenames_short)
+
+    else:
+        print("Wrong parameter for whole. Please enter 1 for computing the histogram of the whole dataset,"
+              "or 0 for using preexisting data (if any)")
+        return
+
+    minimums = np.argsort(distances)
+
+    for i in range(10):
+        print("Song position " + str(i) + ": " + filenames[minimums[i]])
+
+    print("Closest song: " + filenames[np.argmin(distances)] + " distance: " + str(np.min(distances)))
+
+    # print(song)
+    #list_notes = list(np.load(filenames[np.argmin(distances)]))
+    #list_notes = [note_to_int[char] for char in list_notes]
+    # print(list_notes)
+    # print(distance_debug(song, list_notes))
+
+
+def load_hist_distances(filenames_short):
+    song = np.load(SONG_PATH)
+    song_histogram = interval_histogram(pitch_histogram(song))
+    distances = []
+    for i in tqdm(range(len(filenames_short))):
+        path = HISTO_PATH + filenames_short[i]
+        current_histogram = np.load(path)
+        if current_histogram.size > 0:
+            distances.append(compare_histograms(song_histogram, current_histogram))
+        else:
+            distances.append(1000)
+
+    return distances
+
+
+def create_hist_distances(filenames_short, filenames):
+    song = np.load(SONG_PATH)
+    distances = []
+    song_histogram = interval_histogram(pitch_histogram(song))
+    _, _, _, pitchnames, _ = data.prepare_sequences()
 
     # create a dictionary to map pitches to integers
     note_to_int = dict((note, number)
                        for number, note in enumerate(pitchnames))
-
-    song = np.load(SONG_PATH)
-
-    distances = []
-
-    song_histogram = interval_histogram(pitch_histogram(song))
 
     for i in tqdm(range(len(filenames))):
         list_notes = list(np.load(filenames[i]))
@@ -171,71 +216,7 @@ def evaluation_whole():
         else:
             distances.append(1000)
 
-    minimums = np.argsort(distances)
-
-    for i in range(10):
-        print("Song position " + str(i) + ": " + filenames[minimums[i]])
-
-    print("Closest song: " + filenames[np.argmin(distances)] + " distance: " + str(np.min(distances)))
-
-    # print(song)
-    list_notes = list(np.load(filenames[np.argmin(distances)]))
-    list_notes = [note_to_int[char] for char in list_notes]
-    # print(list_notes)
-    # print(distance_debug(song, list_notes))
-
-
-def evaluation_load():
-    print("Evaluating: " + SONG_PATH)
-    filenames_temp = []
-    files_path = "data/individual_songs/"
-    for filename in glob.glob(files_path + "*"):
-        filenames_temp.append(filename)
-
-    filenames = sorted(filenames_temp)
-
-    filenames_short = []
-    for filename in filenames:
-        if filename.startswith(files_path):
-            print(filename)
-            print(len(filename))
-            filenames_short.append(filename[len(files_path):])
-        else:
-            filenames_short.append(filename)
-    print(filenames_short[0])
-
-    _, _, n_vocab, pitchnames, _ = data.prepare_sequences()
-
-    # create a dictionary to map pitches to integers
-    note_to_int = dict((note, number)
-                       for number, note in enumerate(pitchnames))
-
-    song = np.load(SONG_PATH)
-
-    distances = []
-
-    song_histogram = interval_histogram(pitch_histogram(song))
-
-    for i in tqdm(range(len(filenames))):
-        path = HISTO_PATH + filenames_short[i]
-        current_histogram = np.load(path)
-        if current_histogram.size > 0:
-            distances.append(compare_histograms(song_histogram, current_histogram))
-        else:
-            distances.append(1000)
-
-    minimums = np.argsort(distances)
-
-    for i in range(10):
-        print("Song position " + str(i) + ": " + filenames[minimums[i]])
-
-    print("Closest song: " + filenames[np.argmin(distances)] + " distance: " + str(np.min(distances)))
-
-    # print(song)
-    list_notes = list(np.load(filenames[np.argmin(distances)]))
-    list_notes = [note_to_int[char] for char in list_notes]
-    # print(list_notes)
-    # print(distance_debug(song, list_notes))
+    return distances
 
 
 # inputs : two lists of length 12
@@ -304,18 +285,4 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    var = args.whole
-
-    if var == 0:
-        if not os.path.exists("histograms"):
-            os.makedirs("histograms")
-        evaluation_whole()
-    elif var == 1:
-        if not (os.path.exists("histograms")):
-            print("There is histograms, under histogram directory. Please try computing "
-                  "all the histograms first (parameter 1).")
-        else:
-            evaluation_load()
-    else:
-        print("Wrong parameter for whole. Please enter 1 for computing the histogram of the whole dataset,"
-              "or 0 for using preexisting data (if any)")
+    evaluation(args.whole)
