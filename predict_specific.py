@@ -39,7 +39,7 @@ def generate(i):
     if conditions_string == "":
         conditions_string = "all"
 
-    print("Generate songs for:" + conditions_string)
+    print("Generate songs for: " + conditions_string)
 
     np.save("results/" + RUN_NAME +
             "/" + conditions_string + 'output' + str(i) + '.npy', network_output)

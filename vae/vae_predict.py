@@ -14,7 +14,7 @@ def generate():
     g_input = np.random.rand(1, vae_config.LATENT_DIM)
 
     net = vae_network.VAE()
-    net.load_weights('outputs/arabic_india_ashsham_suomi/vae_weights/vae_weights.hdf5')
+    net.load_weights('outputs/a_i_a_s/vae_weights/vae_weights.hdf5')
 
     generator = net.generator
 
