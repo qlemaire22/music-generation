@@ -173,6 +173,8 @@ def evaluation(whole):
         print("Song position " + str(i) + ": " + filenames[minimums[i]])
 
     print("Closest song: " + filenames[np.argmin(distances)] + " distance: " + str(np.min(distances)))
+    best_histo = np.load(HISTO_PATH + filenames_short[np.argmin(distances)])
+    print(best_histo)
 
     # print(song)
     #list_notes = list(np.load(filenames[np.argmin(distances)]))
@@ -184,6 +186,7 @@ def evaluation(whole):
 def load_hist_distances(filenames_short):
     song = np.load(SONG_PATH)
     song_histogram = interval_histogram(pitch_histogram(song))
+    print(song_histogram)
     distances = []
     for i in tqdm(range(len(filenames_short))):
         path = HISTO_PATH + filenames_short[i]
