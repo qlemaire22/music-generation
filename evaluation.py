@@ -187,6 +187,7 @@ def evaluation(loaddata):
 def load_hist_distances(filenames_short):
     song = np.load(SONG_PATH)
     song_histogram = interval_histogram(pitch_histogram(song), len(song))
+
     print(song_histogram)
     distances = []
     for i in tqdm(range(len(filenames_short))):
@@ -196,6 +197,7 @@ def load_hist_distances(filenames_short):
         # because of nan in asian file 1028
         if np.isnan(current_histogram).any():
             current_histogram = np.array([0] * NB_SEMITONES)
+
 
         if current_histogram.size > 0:
             distances.append(compare_histograms(song_histogram, current_histogram))
@@ -295,3 +297,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     evaluation(args.loaddata)
+
