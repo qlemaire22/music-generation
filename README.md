@@ -30,7 +30,7 @@ Some of the information are still hardcoded in some files for now so some manipu
 
 - `python train.py` to train the LSTM network over the whole dataset.
 
-- Then, you can generate the memories of the network according to some constrains. The constrains are hardcoded in the file `generate_memories.py`, it will select each song that match one of the condition in their file name to create the memories. Once you have written your condition, you also need to write the file containing the saved weights of the network and then run `python generate_memories.py`.
+- Then, you can generate memories of the network according to some constrains. The constrains are hardcoded in the file `generate_memories.py`, it will select each song that match one of the conditions in their file name to create the memories. Once you have written your condition, you also need to write the name of file containing the saved weights of the network and then run `python generate_memories.py`.
 
 - Once the memories have been generated, you can train the VAE over the memories. First, you have to put the path toward the `.npy` containing the memories in `vae/vae_data.py`. After that, you can train the VAE with `python vae/vae_train.py`.
 
