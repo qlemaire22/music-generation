@@ -8,7 +8,7 @@ from tqdm import tqdm
 import copy
 import argparse
 
-SONG_PATH = "results/han_china_output0.npy"
+SONG_PATH = "results/italia_output4.npy"
 HISTO_PATH = "histograms/"
 NB_SEMITONES = 12
 REAL_NB_NOTES = 52
@@ -224,6 +224,7 @@ def create_hist_distances(filenames_short, filenames):
 
 # inputs : two lists of length 12
 # output : sum of differences
+# idea to modify the method : add a strong weight for a note which is 0 compared to a non zero note
 def compare_histograms(hist1, hist2):
     result = 0
     for i in range(NB_SEMITONES):
@@ -251,6 +252,7 @@ def interval_histogram(pitch_histo):
     # as a relative to the most recurrent note
     for idx in range(length):
         result[int((idx - max_idx) % NB_SEMITONES)] += pitch_histo[idx] / length
+
 
     return result
 
