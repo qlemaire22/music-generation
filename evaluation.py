@@ -8,10 +8,11 @@ from tqdm import tqdm
 import copy
 import argparse
 
-SONG_PATH = "results/italia_output4.npy"
+SONG_PATH = "results/han_china_output0.npy"
 HISTO_PATH = "histograms/"
 NB_SEMITONES = 12
 REAL_NB_NOTES = 52
+REAL_NB_NOTES_PLUS = 60
 
 
 """def evaluation():
@@ -132,7 +133,7 @@ def distance_debug(song1, song2):
 """
 
 
-def evaluation(whole):
+def evaluation(loaddata):
     print("Evaluating: " + SONG_PATH)
     files_path = "data/individual_songs/"
 
@@ -149,12 +150,12 @@ def evaluation(whole):
         else:
             filenames_short.append(filename)
 
-    if whole == 0:
+    if loaddata == 0:
         if not os.path.exists("histograms"):
             os.makedirs("histograms")
         distances = create_hist_distances(filenames_short, filenames)
 
-    elif whole == 1:
+    elif loaddata == 1:
         if not (os.path.exists("histograms")):
             print("There is histograms, under histogram directory. Please try computing "
                   "all the histograms first (parameter 1).")
@@ -185,12 +186,17 @@ def evaluation(whole):
 
 def load_hist_distances(filenames_short):
     song = np.load(SONG_PATH)
-    song_histogram = interval_histogram(pitch_histogram(song))
+    song_histogram = interval_histogram(pitch_histogram(song), len(song))
     print(song_histogram)
     distances = []
     for i in tqdm(range(len(filenames_short))):
         path = HISTO_PATH + filenames_short[i]
         current_histogram = np.load(path)
+
+        # because of nan in asian file 1028
+        if np.isnan(current_histogram).any():
+            current_histogram = np.array([0] * NB_SEMITONES)
+
         if current_histogram.size > 0:
             distances.append(compare_histograms(song_histogram, current_histogram))
         else:
@@ -201,9 +207,10 @@ def load_hist_distances(filenames_short):
 
 def create_hist_distances(filenames_short, filenames):
     song = np.load(SONG_PATH)
-    distances = []
-    song_histogram = interval_histogram(pitch_histogram(song))
+    song_histogram = interval_histogram(pitch_histogram(song), len(song))
+    print(song_histogram)
     _, _, _, pitchnames, _ = data.prepare_sequences()
+    distances = []
 
     # create a dictionary to map pitches to integers
     note_to_int = dict((note, number)
@@ -212,7 +219,7 @@ def create_hist_distances(filenames_short, filenames):
     for i in tqdm(range(len(filenames))):
         list_notes = list(np.load(filenames[i]))
         list_notes = [note_to_int[char] for char in list_notes]
-        current_histogram = interval_histogram(pitch_histogram(list_notes))
+        current_histogram = interval_histogram(pitch_histogram(list_notes), len(list_notes))
         np.save(HISTO_PATH + filenames_short[i], current_histogram)
         if len(list_notes) > 0:
             distances.append(compare_histograms(song_histogram, current_histogram))
@@ -235,24 +242,21 @@ def compare_histograms(hist1, hist2):
 def pitch_histogram(song):
     length = len(song)
     my_dict = note_to_mypitch_table()
-    histogram = [0] * REAL_NB_NOTES
+    histogram = [0] * NB_SEMITONES
     for i in range(length):
-        histogram[my_dict[song[i]]] += 1
+        histogram[my_dict[song[i]] % NB_SEMITONES] += 1
     return np.asarray(histogram)
 
 
-# input should be numpy array
+# input should be numpy array and length of whole song
 # return normalized list
-def interval_histogram(pitch_histo):
+def interval_histogram(pitch_histo, length):
     result = [0] * NB_SEMITONES
-    length = pitch_histo.size
     max_idx = np.argmax(pitch_histo)
-
     # count + normalize frequency of each note
     # as a relative to the most recurrent note
-    for idx in range(length):
-        result[int((idx - max_idx) % NB_SEMITONES)] += pitch_histo[idx] / length
-
+    for idx in range(NB_SEMITONES):
+        result[idx - int(max_idx)] += pitch_histo[idx] / length
 
     return result
 
@@ -284,10 +288,10 @@ def note_to_mypitch_table():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--whole', default=0,
+    parser.add_argument('--loaddata', default=0,
                         help="0 if you want to recompute the histograms for the whole dataset,"
                              "1 if you want to load pre-existing histograms.", type=int)
 
     args = parser.parse_args()
 
-    evaluation(args.whole)
+    evaluation(args.loaddata)
