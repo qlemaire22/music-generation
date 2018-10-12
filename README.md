@@ -1,4 +1,4 @@
-# Music-Generation
+# Memory Sampling for Domain-Specific Music Generation
 
 The implementation of the LSTM network was based on the work of Sigurður Skúli ([link](https://towardsdatascience.com/how-to-generate-music-using-a-lstm-neural-network-in-keras-68786834d4c5)) and the VAE implementation was based on the tutorial by François Chollet on Keras ([link](https://blog.keras.io/building-autoencoders-in-keras.html)).
 
